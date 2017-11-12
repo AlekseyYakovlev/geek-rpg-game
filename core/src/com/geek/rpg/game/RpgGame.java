@@ -9,11 +9,19 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.geek.rpg.game.Heros.DarkElf;
-import com.geek.rpg.game.Heros.Knight;
-import com.geek.rpg.game.Heros.Wizard;
-import com.geek.rpg.game.Monsters.Basilisk;
-import com.geek.rpg.game.Monsters.Skeleton;
+import com.geek.rpg.game.core.FlyingText;
+import com.geek.rpg.game.core.InputHandler;
+import com.geek.rpg.game.ui.Background;
+import com.geek.rpg.game.ui.Button;
+import com.geek.rpg.game.units.Al;
+import com.geek.rpg.game.units.Monster;
+import com.geek.rpg.game.units.Player;
+import com.geek.rpg.game.units.AbstractUnit;
+import com.geek.rpg.game.units.heros.DarkElf;
+import com.geek.rpg.game.units.heros.Knight;
+import com.geek.rpg.game.units.heros.Wizard;
+import com.geek.rpg.game.units.monsters.Basilisk;
+import com.geek.rpg.game.units.monsters.Skeleton;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,19 +37,10 @@ public class RpgGame extends ApplicationAdapter {
     private BitmapFont font;
     private Background background;
     private AbstractUnit currentUnit, lastTurnUnit;
-    protected ArrayList <AbstractUnit> units;
+    public ArrayList <AbstractUnit> units;
     private Iterator <AbstractUnit> turn;
 
     private BitmapFont testText;
-
-    private Texture knightTexture;
-    private Texture skeletonTexture;
-    private Texture basiliskTexture;
-    private Texture wizardTexture;
-    private Texture darkElfTexture;
-
-    public Texture fireBallTexture;
-    public Texture blastTexture;
 
     private List<Button> btnGUI;
     private FlyingText[] msgs;
@@ -59,26 +58,14 @@ public class RpgGame extends ApplicationAdapter {
         }
 
 
-        knightTexture = new Texture("knight.png");
-        skeletonTexture = new Texture("skeleton.png");
-        basiliskTexture = new Texture("basilisk.png");
-        wizardTexture = new Texture("wizard.png");
-        darkElfTexture = new Texture("darkElf.png");
-
-        fireBallTexture= new Texture("fireBall1.png");
-        blastTexture= new Texture("blast.png");
-
         units = new ArrayList<AbstractUnit>();
 
-
-
-
-        units.add(new Knight(this, knightTexture,new Vector2(400, 300)));
-        units.add(new Basilisk(this,basiliskTexture,new Vector2(700, 250)));
-        units.add(new Wizard(this, wizardTexture,new Vector2(150, 200)));
-        units.add(new Skeleton(this,skeletonTexture,new Vector2(850, 150)));
-        units.add(new Skeleton(this,skeletonTexture,new Vector2(750, 100)));
-        units.add(new DarkElf(this, darkElfTexture,new Vector2(300, 100)));
+        units.add(new Knight(this, new Vector2(400, 300)));
+        units.add(new Basilisk(this, new Vector2(700, 250)));
+        units.add(new Wizard(this, new Vector2(150, 200)));
+        units.add(new Skeleton(this, new Vector2(850, 150)));
+        units.add(new Skeleton(this, new Vector2(750, 100)));
+        units.add(new DarkElf(this, new Vector2(300, 100)));
 
         turn = units.listIterator();
         currentUnit = turn.next();
@@ -141,7 +128,7 @@ public class RpgGame extends ApplicationAdapter {
                     if (btnGUI.get(i).checkClick()) {
                         currentUnit.shield(false);
                         for (int j = 0; j < btnGUI.size(); j++) {
-                            btnGUI.get(j).setPressed(j == i ? true : false);
+                            btnGUI.get(j).setPressed(j == i);
                             if (i==j) {
                                 tempText=currentUnit.getClass().getSimpleName()+" "+btnGUI.get(j).getAction();
                                 if ( btnGUI.get(j).isInstantAction()){
